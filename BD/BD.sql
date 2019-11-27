@@ -14,14 +14,10 @@ create table materia(
     nome varchar(255)
 );
 
-create table gradeH( #grade de horários de cada usuario
-	aluno int primary key,
-    materias int
-);
-
-create table listaAlunos( #lista de Alunos de cada materia
-	materia int primary key not null,
-    alunos int not null
+create table gradeEstudo( #grade de horários de cada usuario
+	aluno int not null,
+    materias int not null,
+    primary key (aluno, materias)
 );
 
 create table atividade(
@@ -31,11 +27,7 @@ create table atividade(
     conteudo varchar(255)
 );
 
-alter table listaAlunos
-	add constraint materiaa foreign key (materia) references materia(id),
-    add constraint alunoss foreign key (alunos) references usuario(id);
-
-alter table gradeH
+alter table gradeEstudo
 	add constraint alunos foreign key (aluno) references usuario(id),
     add constraint materia foreign key (materias) references materia(id);
 
