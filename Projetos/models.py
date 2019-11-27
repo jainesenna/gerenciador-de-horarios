@@ -2,7 +2,12 @@ from django.db import models
 
 # Create your models here.
 
+# Exclude = Contrário de filter
 
+# Materia.objects.filter(id__lte=2) | pega as materias com id <= 2
+# Materia.objects.exclude(id__lte=2) | pega as materias cujo o id não é <= 2
+
+# Para mais comandos veja o "Comandos_Django_BD.txt"
 
 class Materia(models.Model):
     horario = models.CharField(max_length=22, blank=True, null=True)
@@ -22,8 +27,6 @@ class Usuario(models.Model):
         db_table = 'usuario'
     def __str__(self):
         return self.nome
-    def __id__(self):
-        return self.id
 
 class Gradeestudo(models.Model):
     aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno', primary_key=True)
