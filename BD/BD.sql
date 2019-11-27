@@ -1,5 +1,5 @@
-#create database trabalho2019bd1;
-use trabalho2019bd1;
+#create database trabalhobd2019_2;
+use trabalhobd2019_2;
 
 create table usuario(
 	id int primary key auto_increment not null,
@@ -36,5 +36,5 @@ alter table atividade
     add constraint materias foreign key (materia) references materia(id);
 
 #SET FOREIGN_KEY_CHECKS=0;
-#drop tables gradeH, usuario, materia, listaAlunos, atividade;
+#drop tables gradeEstudo, usuario, materia, atividade;
 #SET FOREIGN_KEY_CHECKS=1;
