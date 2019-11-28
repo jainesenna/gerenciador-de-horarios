@@ -1,4 +1,7 @@
 #create database trabalhobd2019_2;
+#SET FOREIGN_KEY_CHECKS=0;
+#drop tables gradeEstudo, usuario, materia, atividade,HorarioEstudo;
+#SET FOREIGN_KEY_CHECKS=1;
 use trabalhobd2019_2;
 
 create table usuario(
@@ -14,10 +17,17 @@ create table materia(
     nome varchar(255)
 );
 
-create table gradeEstudo( #grade de horários de cada usuario
+create table HorarioEstudo( #ligação Aluno-Materia
+	id int auto_increment primary key,
 	aluno int not null,
     materias int not null,
-    primary key (aluno, materias)
+    horario varchar(8) #23M12 (primeiro e segundo horário da manhã de segunda e da terça 
+);
+
+create table gradeEstudo( #ligação Aluno-Materia
+	id int auto_increment primary key,
+	aluno int not null,
+    materias int not null
 );
 
 create table atividade(
@@ -31,10 +41,10 @@ alter table gradeEstudo
 	add constraint alunos foreign key (aluno) references usuario(id),
     add constraint materia foreign key (materias) references materia(id);
 
+alter table HorarioEstudo
+	add constraint alunas foreign key (aluno) references usuario(id),
+    add constraint materio foreign key (materias) references materia(id);
+
 alter table atividade
 	add constraint aluna foreign key (aluno) references usuario(id),
     add constraint materias foreign key (materia) references materia(id);
-
-#SET FOREIGN_KEY_CHECKS=0;
-#drop tables gradeEstudo, usuario, materia, atividade;
-#SET FOREIGN_KEY_CHECKS=1;
