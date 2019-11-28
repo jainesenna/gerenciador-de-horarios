@@ -29,7 +29,7 @@ class Usuario(models.Model):
         return self.nome
 
 class Gradeestudo(models.Model):
-    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno', primary_key=True)
+    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
     materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
 
     class Meta:
@@ -45,3 +45,12 @@ class Atividade(models.Model):
         db_table = 'atividade'
     def __str__(self):
         return self.conteudo
+
+class Horarioestudo(models.Model):
+    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
+    materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
+    horario = models.CharField(max_length=3, blank=True, null=True)
+
+    class Meta:
+        db_table = 'HorarioEstudo'
+        unique_together = (('aluno', 'materias'),)

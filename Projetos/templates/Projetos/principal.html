@@ -1,0 +1,33 @@
+{# yonetim/templates/list.html #}
+{% load render_table from django_tables2 %}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 
+'Projetos/style.css' %}" />
+    </head>
+    <body>
+        {% if estudos %}
+        {% render_table estudos %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="radio" value="clique aqui para editar a grade de horarios" name="editar" id="editar">
+            <input type="radio" value="clique aqui para apagar a grade de horarios" name="editar" id="apagar">
+            <input type="submit" value="enviar" name="submit" id="Submit">
+        </form>
+        {% else %}
+        <p>Sem horario de estudo cadastrado</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="radio" value="clique aqui para criar um manualmente" name="editar" id="manual">
+            <input type="radio" value="clique aqui para criar um automaticamente" name="editar" id="automatico">
+            <input type="submit" value="enviar" name="submit" id="Submit">
+        </form>
+        {% endif %}
+        {% if materias %}
+        {% render_table materias %}
+        {% else %}
+        {% endif %}
+    </body>
+</html>
