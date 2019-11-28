@@ -1,0 +1,52 @@
+https://docs.djangoproject.com/en/2.2/ref/models/querysets/#django.db.models.query.QuerySet.filter
+
+
+Usados dentro de um filter/exclude/etc.:
+
+	__in | in fuction
+
+	gt | Greater than.
+
+	gte | Greater than or equal to.
+
+	lt | Less than.
+
+	lte | Less than or equal to.
+
+	startswith | Case-sensitive starts-with.
+
+	istartswith | Case-insensitive starts-with.
+
+	endswith | Case-sensitive ends-with.
+
+	iendswith | Case-insensitive ends-with.
+
+	range | Range test (inclusive).
+
+	date | For datetime fields, casts the value as date. Allows chaining additional field lookups. Takes a date value.
+	é possivel usar algo como pub_date__date__gt datetime.date(2019,11,11) (a data é depois de 11 de novembro de 2019)
+
+	year | For date and datetime fields, an exact year match. Allows chaining additional field lookups. Takes an integer year.
+
+	iso_year | For date and datetime fields, an exact ISO 8601 week-numbering year match. Allows chaining additional field lookups. Takes an integer year.
+
+	month | For date and datetime fields, an exact month match. Allows chaining additional field lookups. Takes an integer 1 (January) through 12 (December).
+
+	day | For date and datetime fields, an exact day match. Allows chaining additional field lookups. Takes an integer day.
+
+	week | For date and datetime fields, return the week number (1-52 or 53) according to ISO-8601, i.e., weeks start on a Monday and the first week contains the year’s first Thursday.
+
+	week_day | For date and datetime fields, a ‘day of the week’ match. Allows chaining additional field lookups.
+	Takes an integer value representing the day of week from 1 (Sunday) to 7 (Saturday).
+
+	quarter | For date and datetime fields, a ‘quarter of the year’ match. Allows chaining additional field lookups. Takes an integer value between 1 and 4 representing the quarter of the year.
+
+	time | For datetime fields, casts the value as time. Allows chaining additional field lookups. Takes a datetime.time value
+
+	hour | For datetime and time fields, an exact hour match. Allows chaining additional field lookups. Takes an integer between 0 and 23.
+
+	minute | For datetime and time fields, an exact minute match. Allows chaining additional field lookups. Takes an integer between 0 and 59.
+
+	second | For datetime and time fields, an exact second match. Allows chaining additional field lookups. Takes an integer between 0 and 59.
+
+	isnull | Takes either True or False, which correspond to SQL queries of IS NULL and IS NOT NULL, respectively.
