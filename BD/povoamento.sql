@@ -1,5 +1,5 @@
 
-#use trabalhobd1;
+#use trabalhobd2019_2;
 insert into usuario(nome, email, senha) values ("Pedro", "pedrojonassm@gmail.com", "pedrojonas13");
 
 insert into materia (horario, nome) values ("23T34", "Arquitetura"), ("45T56", "Banco de Dados"), ("46T34", "Engenharia de Software"),

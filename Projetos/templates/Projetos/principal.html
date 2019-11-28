@@ -10,24 +10,26 @@
     <body>
         {% if estudos %}
         {% render_table estudos %}
-        <form action="" method="POST">
-            {% csrf_token %}
-            <input type="radio" value="clique aqui para editar a grade de horarios" name="editar" id="editar">
-            <input type="radio" value="clique aqui para apagar a grade de horarios" name="editar" id="apagar">
-            <input type="submit" value="enviar" name="submit" id="Submit">
-        </form>
         {% else %}
         <p>Sem horario de estudo cadastrado</p>
-        <form action="" method="POST">
-            {% csrf_token %}
-            <input type="radio" value="clique aqui para criar um manualmente" name="editar" id="manual">
-            <input type="radio" value="clique aqui para criar um automaticamente" name="editar" id="automatico">
-            <input type="submit" value="enviar" name="submit" id="Submit">
-        </form>
+        <a class="btn btn-primary" href="{% url 'Projetos:horarios_auto'%}">Criar um horario automatico</a>
+        <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Criar um horario Manualmente</a>
         {% endif %}
-        {% if materias %}
-        {% render_table materias %}
-        {% else %}
-        {% endif %}
+        <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Editar horario de estudo</a>
+        <table border="1">
+            <tr>
+                <th>Nome</th>
+                <th>Horario</th>
+            </tr>
+            {% if materias %}
+            {% for m in materias%}
+            <tr>
+                <td>{{m.nome}}</td>
+                <td>{{m.horario}}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            <a class="btn btn-primary" href="{% url 'Projetos:apagar_horarios'%}">Apagar meus horarios de estudo</a>
+        </table>
     </body>
 </html>
