@@ -1,0 +1,32 @@
+<html>
+<body>
+    <div class="container">
+        {%if atividades %}
+        <table class="atividades" border="1">
+            <tr>
+                <th>Materia</th>
+                <th>Conteudo</th>
+            </tr>
+            {%for x in lista_atividades%}
+            <tr>
+                {%for y in x|safeseq%}
+                <th>{{y}}</th>
+                {%endfor%}
+            </tr>
+            {%endfor%}
+        </table>
+        {% else %}
+        <p>nao foi encontrado atividades cadastradas</p>
+        {% endif %}
+        <div class="nova_atividade">
+            <form method="post">
+                <h1>Adicionar ou editar atividade</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit" />
+            </form>
+            <h3>Escreva "12345" em conteudo para apagar todas as suas atividades de uma materia x<br />Caso nao haja nada em materia tudo sera deletado</h3>
+            <a class="btn btn-primary" href="{% url 'Projetos:principal'%}">Voltar para a tela inicial</a><br /><br />
+        </div>
+</body>
+</html>
