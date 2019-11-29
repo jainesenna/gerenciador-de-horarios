@@ -9,7 +9,7 @@ insert into gradeEstudo (aluno, materias) values (1, 1), (1, 2), (1, 3), (1, 4),
 
 insert into atividade(aluno, materia, conteudo) values (1, 3, "teste");
 
-insert into HorarioEstudo (aluno, materias, horario) values (1, 1, "2M12"), (1,4,”2M34”), (1,2,”4M12”), (1,5,”4M34”), (1,3,”4M56”), (1,6,”5M12”);
+insert into HorarioEstudo (aluno, materias, horario) values (1, 1, "2M12"), (1,4,"2M34"), (1,2,"4M12"), (1,5,"4M34"), (1,3,"4M56"), (1,6,"5M12");
 
 # pegando as materias que um aluno esta dentro || Para a página de aluno
 select materia.nome from usuario, materia, gradeEstudo where gradeEstudo.materias = materia.id and usuario.id = gradeEstudo.aluno and usuario.nome = "Pedro";
@@ -37,3 +37,5 @@ union
 select "Aulas" as estudar, "" as horario
 union
 select m.nome, m.horario from materia m, usuario u, gradeEstudo g where g.aluno = u.id and g.materias = m.id;
+
+select * from gradeEstudo;

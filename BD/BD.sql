@@ -1,4 +1,4 @@
-#create database trabalhobd2019_2;
+create database trabalhobd2019_2;
 #SET FOREIGN_KEY_CHECKS=0;
 #drop tables gradeEstudo, usuario, materia, atividade,HorarioEstudo;
 #SET FOREIGN_KEY_CHECKS=1;

@@ -9,14 +9,43 @@ from django.db import models
 
 # Para mais comandos veja o "Comandos_Django_BD.txt"
 
+class Atividade(models.Model):
+    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
+    materia = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materia', blank=True, null=True)
+    conteudo = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'atividade'
+
+
+class Gradeestudo(models.Model):
+    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
+    materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
+
+    class Meta:
+        managed = False
+        db_table = 'gradeestudo'
+
+
+class Horarioestudo(models.Model):
+    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
+    materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
+    horario = models.CharField(max_length=8, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'horarioestudo'
+
+
 class Materia(models.Model):
     horario = models.CharField(max_length=22, blank=True, null=True)
     nome = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        managed = False
         db_table = 'materia'
-    def __str__(self):
-        return self.nome
+
 
 class Usuario(models.Model):
     nome = models.CharField(max_length=100)
@@ -24,33 +53,5 @@ class Usuario(models.Model):
     senha = models.CharField(max_length=255)
 
     class Meta:
+        managed = False
         db_table = 'usuario'
-    def __str__(self):
-        return self.nome
-
-class Gradeestudo(models.Model):
-    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
-    materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
-
-    class Meta:
-        db_table = 'gradeestudo'
-        unique_together = (('aluno', 'materias'),)
-
-class Atividade(models.Model):
-    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
-    materia = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materia', blank=True, null=True)
-    conteudo = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        db_table = 'atividade'
-    def __str__(self):
-        return self.conteudo
-
-class Horarioestudo(models.Model):
-    aluno = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='aluno')
-    materias = models.ForeignKey('Materia', models.DO_NOTHING, db_column='materias')
-    horario = models.CharField(max_length=3, blank=True, null=True)
-
-    class Meta:
-        db_table = 'HorarioEstudo'
-        unique_together = (('aluno', 'materias'),)

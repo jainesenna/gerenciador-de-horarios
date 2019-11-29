@@ -3,33 +3,64 @@
 {% load static %}
 <!doctype html>
 <html>
-    <head>
-        <link rel="stylesheet" href="{% static 
-'Projetos/style.css' %}" />
-    </head>
+<head>
+    <link rel="stylesheet" href="../static/Projetos/principal.css" />
+</head>
     <body>
-        {% if estudos %}
-        {% render_table estudos %}
-        {% else %}
-        <p>Sem horario de estudo cadastrado</p>
-        <a class="btn btn-primary" href="{% url 'Projetos:horarios_auto'%}">Criar um horario automatico</a>
-        <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Criar um horario Manualmente</a>
-        {% endif %}
-        <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Editar horario de estudo</a>
-        <table border="1">
-            <tr>
-                <th>Nome</th>
-                <th>Horario</th>
-            </tr>
-            {% if materias %}
-            {% for m in materias%}
-            <tr>
-                <td>{{m.nome}}</td>
-                <td>{{m.horario}}</td>
-            </tr>
-            {% endfor %}
+        <div class="container">
+            {%if atividades %}
+            <table class="atividades" border="1">
+                <tr>
+                    <th>Materia</th>
+                    <th>Conteudo</th>
+                </tr>
+                {%for x in lista_atividades%}
+                <tr>
+                    {%for y in x|safeseq%}
+                    <th>{{y}}</th>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+            {% else %}
+            <p>nao foi encontrado atividades cadastradas</p>
             {% endif %}
-            <a class="btn btn-primary" href="{% url 'Projetos:apagar_horarios'%}">Apagar meus horarios de estudo</a>
-        </table>
+            {% if lista_estudos %}
+            <table class="estudos" border="1">
+                <tr>
+                    <th>Materia</th>
+                    <th>Hora</th>
+                </tr>
+                {%for x in lista_estudos%}
+                <tr>
+                    {%for y in x|safeseq%}
+                    <th>{{y}}</th>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+            {% else %}
+            <p>Sem horario de estudo cadastrado</p>
+            <a class="btn btn-primary" href="{% url 'Projetos:horarios_auto'%}">Criar um horario automatico</a><br />
+            <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Criar um horario Manualmente</a><br /><br />
+            {% endif %}
+            <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Editar horario de estudo</a><br />
+            <table border="1" class="materias">
+                <tr>
+                    <th>Nome</th>
+                    <th>Horario</th>
+                </tr>
+                {% if materias %}
+                {% for m in materias%}
+                <tr>
+                    <td>{{m.nome}}</td>
+                    <td>{{m.horario}}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                <a class="btn btn-primary" href="{% url 'Projetos:apagar_horarios'%}">Apagar meus horarios de estudo</a>
+                <br />
+            </table>
+        </div>
     </body>
 </html>
