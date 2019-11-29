@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/Projetos/principal.css" />
+    </head>
+    <body>
+        <div class="atividades">
+            {%if erro %}
+                {{erro}}
+            {%endif%}
+            {% if lista_estudos %}
+            <table class="estudos" border="1">
+                <tr>
+                    <th>id</th>
+                    <th>Materia</th>
+                    <th>Hora</th>
+                </tr>
+                {%for x in lista_estudos%}
+                <tr>
+                    {%for y in x|safeseq%}
+                    <th>{{y}}</th>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+            {% endif %}
+        </div>
+        <div class="editar_horario">
+            <form method="post">
+                <h1>Editar Horario</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="enviar" />
+            </form>
+        </div>
+    </body>
+</html>
