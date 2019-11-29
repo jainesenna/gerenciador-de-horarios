@@ -14,6 +14,7 @@ insert into HorarioEstudo (aluno, materias, horario) values (1, 1, "2M12"), (1,4
 # pegando as materias que um aluno esta dentro || Para a página de aluno
 select materia.nome from usuario, materia, gradeEstudo where gradeEstudo.materias = materia.id and usuario.id = gradeEstudo.aluno and usuario.nome = "Pedro";
 
+select * from materia;
 # pegando os alunos que estão dentro de uma materia || para a página de matéria:
 select usuario.nome from usuario, materia, gradeEstudo where gradeEstudo.materias = materia.id and usuario.id = gradeEstudo.aluno and materia.nome = "Arquitetura";
 
