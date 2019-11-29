@@ -5,7 +5,7 @@
     <body>
         <div class="atividades">
             {%if erro %}
-                {{erro}}
+            {{erro}}
             {%endif%}
             {% if lista_estudos %}
             <table class="estudos" border="1">
@@ -32,5 +32,9 @@
                 <input type="submit" value="enviar" />
             </form>
         </div>
+        <h3>Para apagar um horario de estudo, coloque o id correto, a materia correta e deixe o horario vazio</h3>
+        <h3>Para editar um horario, preencha os 3 campos corretamente</h3>
+        <h3>para criar um novo horario de estudo, deixe apenas o campo de id vazio</h3>
+        <a class="btn btn-primary" href="{% url 'Projetos:principal'%}">Voltar para a tela inicial</a><br /><br />
     </body>
 </html>
