@@ -1,4 +1,4 @@
-create database trabalhobd2019_2;
+#create database trabalhobd2019_2;
 #SET FOREIGN_KEY_CHECKS=0;
 #drop tables gradeEstudo, usuario, materia, atividade,HorarioEstudo;
 #SET FOREIGN_KEY_CHECKS=1;
@@ -21,7 +21,7 @@ create table HorarioEstudo( #ligação Aluno-Materia
 	id int auto_increment primary key,
 	aluno int not null,
     materias int not null,
-    horario varchar(8) #23M12 (primeiro e segundo horário da manhã de segunda e da terça 
+    horario varchar(9) #23M12 (primeiro e segundo horário da manhã de segunda e da terça 
 );
 
 create table gradeEstudo( #ligação Aluno-Materia
