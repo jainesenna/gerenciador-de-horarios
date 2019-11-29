@@ -16,23 +16,25 @@
             </tr>
             {%for x in lista_atividades%}
             <tr>
-                <th><a></a></th>
                 {%for y in x|safeseq%}
                 <th>{{y}}</th>
                 {%endfor%}
             </tr>
             {%endfor%}
+            <a class="atividades" href="{% url 'Projetos:editar_atividades'%}">Editar atividades</a>
+            <br />
         </table>
         {% else %}
         <p>nao foi encontrado atividades cadastradas</p>
         {% endif %}
-        <form method="post" class="nova_atividade">
-            <h1>Adicionar atividade</h1>
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit" />
-        </form>
-
+        <div class="nova_atividade">
+            <form method="post">
+                <h1>Adicionar atividade</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
         {% if lista_estudos %}
         <table class="estudos" border="1">
             <tr>
@@ -66,7 +68,7 @@
             </tr>
             {% endfor %}
             {% endif %}
-            <a class="btn btn-primary" href="{% url 'Projetos:apagar_horarios'%}">Apagar meus horarios de estudo</a>
+            <a class="btn btn-primary" href="{% url 'Projetos:apagar_horarios'%}">Apagar todos os meus horarios de estudo</a>
             <br />
         </table>
     </div>

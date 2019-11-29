@@ -7,5 +7,5 @@ urlpatterns = [
     path('horarios_auto', views.horarios_auto, name='horarios_auto'),
     path('horarios_manual', views.horarios_manual, name='horarios_manual'),
     path('apagar_horarios', views.apagar_horarios, name='apagar_horarios'),
-    path('nova_atividade', views.nova_atividade, name='nova_atividade'),
+    path('editar_atividades', views.editar_atividades, name='editar_atividades'),
 ]

@@ -2,15 +2,14 @@ from Projetos.models import Materia, Usuario, Atividade, Gradeestudo, Horarioest
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views import generic
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import NameForm
+from .forms import atividades_form, horarios_form
 
 def Principal(request):
     usuario = Usuario.objects.get(id=1)
 
-    form = NameForm(request.POST or None)
+    form = atividades_form(request.POST or None)
 
     if form.is_valid():
-        a = 0
         m = form.cleaned_data
         mm = Materia.objects.filter(nome = m["materia"])
         cc = str(m["conteudo"])
@@ -29,6 +28,7 @@ def Principal(request):
                     sla.append(e[1])
                     lista_estudos.append(sla)
                     sla = []
+
     for x in atividades:
         a = x[0]
         c = Materia.objects.filter(id=a)
@@ -64,9 +64,69 @@ def horarios_auto(request):
 
 def horarios_manual(request):
     usuario = Usuario.objects.get(id=1)
-    estudos = Horarioestudo.objects.filter(aluno = usuario).values_list('materias', 'horario')
-    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
-    return render(request, 'Projetos/principal.html', locals())
+    estudos = Horarioestudo.objects.filter(aluno = usuario).values_list('id', 'materias', 'horario').order_by('horario')
+    lista_estudos = []
+    sla = []
+    erro = ""
+    for e in estudos:
+        m = Materia.objects.filter(id=e[1])
+        sla.append(e[0])
+        sla.append(m[0].nome)
+        sla.append(e[2])
+        lista_estudos.append(sla)# sla = [id do horario de estudo, nome da materia que esta estudando, horario da materia]
+        sla=[]
+
+    form = horarios_form(request.POST or None)
+
+    if form.is_valid():
+        mae = form.cleaned_data
+        m = mae
+        ida = m['id']
+        hh = m['horario']
+        if len(Horarioestudo.objects.filter(id=ida, aluno=usuario)) > 0: # editando o horario de uma materia
+            h = Horarioestudo.objects.get(id=ida, aluno = usuario)
+            if len(hh) != 4 and len(hh) != 9 and len(hh) != 0:
+                erro = "o horario preenchido não tem 4 ou 9 caracteres"
+            else:
+                if len(Materia.objects.filter(nome = m['materia'], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'))) > 0: #se mandar nulo, o index range é menor que 0:
+                    mm = Materia.objects.filter(nome = m['materia'], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')) # recebe a nova materia
+                else:
+                    mm = Materia.objects.filter(id=h.materias.id, id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')) # recebe a materia que ja estava lá
+                if len(hh) == 0:
+                    h.delete()
+                else:
+                    id = h.id
+                    h.delete()
+                    h.horario = hh
+                    h.id = id
+                    h.save()
+
+        else: #criando um novo horario de estudo
+            {'id': 1, 'horario': '1M12', 'materia': 'Inglês Técnico'}
+            if len(Horarioestudo.objects.filter(horario=hh, aluno = usuario)) > 0: # verifica se o horario de estudo está preenchido
+                erro = "horario já preenchido"
+            elif len(hh) != 4 and len(hh) != 9:
+                erro = "o horario preenchido não tem 4 caracteres"
+            else:
+                mm = Materia.objects.filter(nome = m['materia'], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'))
+                if (len(mm) > 0):
+                    if (len(hh) == 4):
+                        if len(Horarioestudo.objects.filter(horario=hh, aluno = usuario)) > 0:
+                            erro = "Horário já ocupado"
+                        else:
+                            Horarioestudo(aluno = usuario, materias=mm[0], horario = hh).save()
+                    elif (len(hh) == 9):
+                        #str = 1M12 2M12
+                        a = hh[:4] #1M12
+                        b = hh[5:] #2M12
+                        if len(Horarioestudo.objects.filter(horario__contains=a, aluno = usuario)) > 0 or len(Horarioestudo.objects.filter(horario__contains=b, aluno = usuario)) > 0:
+                            erro = "Horario ja ocupado"
+                        else:
+                            Horarioestudo(aluno = usuario, materias=mm[0], horario = hh).save()
+                else:
+                    erro = "Você não esta cadastrado nessa matéria"
+
+    return render(request, 'Projetos/horarios.html', locals())
 
 def apagar_horarios(request):
     usuario = Usuario.objects.get(id=1)
@@ -76,20 +136,37 @@ def apagar_horarios(request):
         x.delete()
     return Principal(request)
 
-def nova_atividade(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+def editar_atividades(request):
+    usuario = Usuario.objects.get(id=1)
+    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
+    atividades = Atividade.objects.filter(aluno=usuario).values_list('materia', 'conteudo')
+    lista_atividades = []
+    sla = []
+    form = atividades_form(request.POST or None)
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = NameForm()
+    if form.is_valid():
+        m = form.cleaned_data
+        cc = m["conteudo"]
+        if m["materia"] != "":
+            mm = Materia.objects.filter(nome = m["materia"], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'))
+            if cc == "12345":
+                for x in Atividade.objects.filter(materia=mm[0],aluno=usuario):
+                    x.delete()
+            else:
+                Atividade(materia=mm[0], conteudo=cc, aluno = usuario).save()
+        else:
+            if cc == "12345":
+                for x in Atividade.objects.filter(aluno=usuario):
+                    x.delete()
+            else:
+                Atividade(conteudo=cc, aluno = usuario).save()
+    for x in atividades:
+        a = x[0]
+        c = Materia.objects.filter(id=a)
+        if (len(c)>0):
+            sla.append(c[0].nome)
+            sla.append(x[1])
+            lista_atividades.append(sla)
+            sla = []
 
-    return Principal(request)
+    return render(request, 'Projetos/atividades.html', locals())
