@@ -12,7 +12,7 @@ def Principal(request):
     if form.is_valid():
         m = form.cleaned_data
         mm = Materia.objects.filter(nome = m["materia"])
-        cc = str(m["conteudo"])
+        cc = m["conteudo"]
         a = Atividade(aluno = usuario, conteudo = cc, materia = mm[0]).save()
 
     estudos = Horarioestudo.objects.filter(aluno = usuario).values_list('materias', 'horario')
