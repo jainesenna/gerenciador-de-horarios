@@ -21,7 +21,7 @@ create table horarioestudo( #ligação Aluno-Materia
 	id int auto_increment primary key,
 	aluno int not null,
     materias int not null,
-    horario varchar(9) #23M12 (primeiro e segundo horário da manhã de segunda e da terça 
+    horario varchar(9) #23M12 ou #2M12 3M12 (primeiro e segundo horário da manhã de segunda e da terça 
 );
 
 create table gradeestudo( #ligação Aluno-Materia
