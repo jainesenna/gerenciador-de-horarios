@@ -1,6 +1,7 @@
 
 #use trabalhobd2019_2;
-insert into usuario(nome, email, senha) values ("Pedro", "pedrojonassm@gmail.com", "pedrojonas13");
+insert into usuario(nome, email, senha) values ("Pedro", "pedrojonassm@gmail.com", "pedrojonas13"), 
+("Jaine", "jainesantossenna191@gmail.com", "jaine123");
 
 insert into materia (horario, nome) values ("23T34", "Arquitetura"), ("45T56", "Banco de Dados"), ("46T34", "Engenharia de Software"),
 ("24T12", "Inglês Técnico"), ("46M45","Matematica Financeira"), ("5T34 6T12", "Programação Web");
