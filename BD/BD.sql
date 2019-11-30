@@ -24,7 +24,7 @@ create table horarioestudo( #ligação Aluno-Materia
     horario varchar(9) #23M12 ou #2M12 3M12 (primeiro e segundo horário da manhã de segunda e da terça 
 );
 
-create table gradeEstudo( #ligação Aluno-Materia
+create table gradeestudo( #ligação Aluno-Materia
 	id int auto_increment primary key,
 	aluno int not null,
     materias int not null
@@ -37,11 +37,11 @@ create table atividade(
     conteudo varchar(255)
 );
 
-alter table gradeEstudo
+alter table gradeestudo
 	add constraint alunos foreign key (aluno) references usuario(id),
     add constraint materia foreign key (materias) references materia(id);
 
-alter table HorarioEstudo
+alter table horarioestudo
 	add constraint alunas foreign key (aluno) references usuario(id),
     add constraint materio foreign key (materias) references materia(id);
 

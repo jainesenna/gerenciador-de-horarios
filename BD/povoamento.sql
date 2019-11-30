@@ -6,18 +6,18 @@ insert into usuario(nome, email, senha) values ("Pedro", "pedrojonassm@gmail.com
 insert into materia (horario, nome) values ("23T34", "Arquitetura"), ("45T56", "Banco de Dados"), ("46T34", "Engenharia de Software"),
 ("24T12", "Inglês Técnico"), ("46M45","Matematica Financeira"), ("5T34 6T12", "Programação Web");
 
-insert into gradeEstudo (aluno, materias) values (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6);
+insert into gradeestudo (aluno, materias) values (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6);
 
 insert into atividade(aluno, materia, conteudo) values (1, 3, "teste");
 
-insert into HorarioEstudo (aluno, materias, horario) values (1, 1, "2M12"), (1,4,"2M34"), (1,2,"4M12"), (1,5,"4M34"), (1,3,"4M56"), (1,6,"5M12");
+insert into horarioestudo (aluno, materias, horario) values (1, 1, "2M12"), (1,4,"2M34"), (1,2,"4M12"), (1,5,"4M34"), (1,3,"4M56"), (1,6,"5M12");
 
 # pegando as materias que um aluno esta dentro || Para a página de aluno
-select materia.nome from usuario, materia, gradeEstudo where gradeEstudo.materias = materia.id and usuario.id = gradeEstudo.aluno and usuario.nome = "Pedro";
+select materia.nome from usuario, materia, gradeestudo where gradeestudo.materias = materia.id and usuario.id = gradeestudo.aluno and usuario.nome = "Pedro";
 
 select * from materia;
 # pegando os alunos que estão dentro de uma materia || para a página de matéria:
-select usuario.nome from usuario, materia, gradeEstudo where gradeEstudo.materias = materia.id and usuario.id = gradeEstudo.aluno and materia.nome = "Arquitetura";
+select usuario.nome from usuario, materia, gradeestudo where gradeestudo.materias = materia.id and usuario.id = gradeestudo.aluno and materia.nome = "Arquitetura";
 
 # Pegando todas as matérias || pesquisa de matéria
 select distinct materia.nome from materia;
@@ -29,7 +29,7 @@ select distinct usuario.nome from usuario;
 select materia.nome, atividade.conteudo from atividade, usuario, materia where materia.id = atividade.materia and atividade.aluno = usuario.id and usuario.nome="Pedro";
 
 # Pegando os horários de estudo de um usuario
-select u.nome, m.nome, h.horario from usuario u, materia m, HorarioEstudo h, gradeEstudo g where g.aluno = u.id and g.materias = m.id and h.aluno = u.id and h.materias = m.id;
+select u.nome, m.nome, h.horario from usuario u, materia m, horarioestudo h, gradeestudo g where g.aluno = u.id and g.materias = m.id and h.aluno = u.id and h.materias = m.id;
 
 #pegando uma tabela com os horarios tanto de estudo quanto de materia preenchidos pelo usuario
 select "Estudar" as estudar, "" as horario
