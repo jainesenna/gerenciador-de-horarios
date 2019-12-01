@@ -42,7 +42,7 @@ def Principal(request):
 def horarios_auto(request):
     usuario = Usuario.objects.get(id=1)
     try:
-        choice = request.GET["escolha"] # estudar ou revisar
+        choice = request.GET["escolha"] # estudar ou revisar. retorna o id das opções cujo nome é "escolha"
     except:
         choice = ""
     estudos = Horarioestudo.objects.filter(aluno = usuario)
@@ -154,35 +154,50 @@ def apagar_horarios(request):
     return Principal(request)
 
 def editar_atividades(request):
-    usuario = Usuario.objects.get(id=1)
-    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
-    atividades = Atividade.objects.filter(aluno=usuario).values_list('materia', 'conteudo')
     lista_atividades = []
     sla = []
     form = atividades_form(request.POST or None)
+    usuario = Usuario.objects.get(id=1)
+    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
+    atividades = Atividade.objects.filter(aluno=usuario).values_list('materia', 'conteudo', 'id')
+    erro = ""
 
-    if form.is_valid():
-        m = form.cleaned_data
-        cc = m["conteudo"]
-        if m["materia"] != "":
+    try:
+        apagar = request.POST.getlist("apagar")
+    except:
+        apagar = []
+        erro = "Não deu certo"
+    if len(apagar) > 0:
+        for x in apagar:
+            Atividade.objects.filter(aluno=usuario, id=int(x)).delete()
+    else:
+        try:
+            choice = request.POST["escolha"] # estudar ou revisar. retorna o id das opções cujo nome é "escolha"
+            # Aqui foi usado post por causa no templat, que no form está descrito que o method é um post
+        except:
+            choice = ""
+
+        if choice == "apagar_tudo":
+            for x in Atividade.objects.filter(aluno=usuario):
+                x.delete()
+        elif form.is_valid():
+            m = form.cleaned_data
+            cc = m["conteudo"]
             mm = Materia.objects.filter(nome = m["materia"], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'))
-            if cc == "12345":
+            if choice == "apagar_materia":
                 for x in Atividade.objects.filter(materia=mm[0],aluno=usuario):
                     x.delete()
             else:
-                Atividade(materia=mm[0], conteudo=cc, aluno = usuario).save()
-        else:
-            if cc == "12345":
-                for x in Atividade.objects.filter(aluno=usuario):
-                    x.delete()
-            else:
-                Atividade(conteudo=cc, aluno = usuario).save()
+                if cc != "":
+                    Atividade(materia=mm[0], conteudo=cc, aluno = usuario).save()
+        
     for x in atividades:
         a = x[0]
         c = Materia.objects.filter(id=a)
         if (len(c)>0):
-            sla.append(c[0].nome)
-            sla.append(x[1])
+            sla.append(c[0].nome) # matéria
+            sla.append(x[1]) #conteúdo
+            sla.append(str(x[2])); #id
             lista_atividades.append(sla)
             sla = []
 

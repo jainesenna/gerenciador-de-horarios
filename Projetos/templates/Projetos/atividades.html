@@ -2,30 +2,45 @@
 <body>
     <div class="container">
         {%if atividades %}
-        <table class="atividades" border="1">
-            <tr>
-                <th>Materia</th>
-                <th>Conteudo</th>
-            </tr>
-            {%for x in lista_atividades%}
-            <tr>
-                {%for y in x|safeseq%}
-                <th>{{y}}</th>
+        <form method="post" action="{% url 'Projetos:editar_atividades'%}">
+            {% csrf_token %}
+            <table class="atividades" border="1">
+                <tr>
+                    <th>Materia</th>
+                    <th>Conteudo</th>
+                    <th>ID</th>
+                    <th>Apagar</th>
+                </tr>
+                {%for x in lista_atividades%}
+                <tr>
+                    {%for y in x|safeseq%}
+                    <th>{{y}}</th>
+                    {%endfor%}
+
+                    <th><input type="checkbox" name="apagar" value="{{x.2}}"></th> <!-- x.2 = pega o terceiro elemento da lista x, que equivale ao id da atividade-->
+                </tr>
                 {%endfor%}
-            </tr>
-            {%endfor%}
-        </table>
+            </table>
+            <input type="submit" value="apagar selecionados">
+        </form>
         {% else %}
         <p>nao foi encontrado atividades cadastradas</p>
         {% endif %}
         <div class="nova_atividade">
-            <form method="post">
-                <h1>Adicionar ou editar atividade</h1>
+            <form method="post" action="{% url 'Projetos:editar_atividades'%}">
                 {% csrf_token %}
                 {{ form.as_p }}
+                <input type="radio" name="escolha" id="apagar_tudo" value="apagar_tudo">
+                <label>Apagar tudo</label><br>
+                <input type="radio" name="escolha" id="apagar_materia" value="apagar_materia">
+                <label>Apagar todas as atividades da materia escolhida</label><br>
+                <input type="radio" name="escolha" id="nova_atividade" value="nova_atividade">
+                <label>Cria uma nova atividade</label><br>
                 <input type="submit" value="Submit" />
             </form>
-            <h3>Escreva "12345" em conteudo para apagar todas as suas atividades de uma materia x<br />Caso nao haja nada em materia tudo sera deletado</h3>
+            {%if erro%}
+            {{erro}}
+            {%endif%}
             <a class="btn btn-primary" href="{% url 'Projetos:principal'%}">Voltar para a tela inicial</a><br /><br />
         </div>
 </body>
