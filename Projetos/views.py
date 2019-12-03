@@ -13,7 +13,7 @@ def Principal(request):
         m = form.cleaned_data
         mm = Materia.objects.filter(nome = m["materia"])
         cc = m["conteudo"]
-        a = Atividade(aluno = usuario, conteudo = cc, materia = mm[0]).save()
+        Atividade(aluno = usuario, conteudo = cc, materia = mm[0]).save()
 
     estudos = Horarioestudo.objects.filter(aluno = usuario).values_list('materias', 'horario')
     materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
@@ -41,25 +41,42 @@ def Principal(request):
 
 def horarios_auto(request):
     usuario = Usuario.objects.get(id=1)
-
+    try:
+        choice = request.GET["escolha"] # estudar ou revisar. retorna o id das opções cujo nome é "escolha"
+    except:
+        choice = ""
     estudos = Horarioestudo.objects.filter(aluno = usuario)
     materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
     sla = ''
     k = 0
     materias_sem_h = Materia.objects.exclude(id__in=Horarioestudo.objects.filter(aluno=usuario).values_list('materias'))
-    for x in ['1','2','3','4','5','6']:
-       dia = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'), horario__startswith = x).order_by('horario') # separando as matérias por dia
-       if len(dia) > 0 and dia[k] in materias_sem_h: #verifica se
-           print("X:" + x + "\n")
-           for y in ["12","34","56"]:
-               if len(Horarioestudo.objects.filter(aluno=usuario, horario = x+"M"+y)) == 0: #verifica se ja não existe nada naquele horário
-                   q = Horarioestudo(aluno=usuario, materias=dia[k], horario = x+"M"+y) # criando novo horário de estudo
-                   q.save()
-                   print("Salvo: " + usuario.nome +"  "+ dia[k].nome +"  "+ "horario:  "+x+"M"+y)
-                   k+=1
-               if k>len(dia)-1:
-                   k = 0
-                   break
+    if choice == "estudar":
+        for x in ['1','2','3','4','5','6']:
+            dia = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'), horario__startswith = x).order_by('horario') # separando as matérias por dia
+            if len(dia) > 0 and dia[k] in materias_sem_h: #verifica se
+                print("X:" + x + "\n")
+                for y in ["12","34","56"]:
+                    if len(Horarioestudo.objects.filter(aluno=usuario, horario = x+"M"+y)) == 0: #verifica se ja não existe nada naquele horário
+                        q = Horarioestudo(aluno=usuario, materias=dia[k], horario = x+"M"+y) # criando novo horário de estudo
+                        q.save()
+                        k+=1
+                    if k>len(dia)-1:
+                        k = 0
+                        break
+    elif choice == "revisar":
+        for x in ['1','2','3','4','5','6']:
+            dia = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'), horario__startswith = x).order_by('horario') # separando as matérias por dia
+            if len(dia) > 0 and dia[k] in materias_sem_h: #verifica se
+                for y in ["12","34","56"]:
+                    if len(Horarioestudo.objects.filter(aluno=usuario, horario = str(int(x)+1)+"M"+y)) == 0: #verifica se ja não existe nada naquele horário
+                        q = Horarioestudo(aluno=usuario, materias=dia[k], horario = str(int(x)+1)+"M"+y) # criando novo horário de estudo
+                        q.save()
+                        k+=1
+                    if k>len(dia)-1:
+                        k = 0
+                        break
+    else:
+        erro = "Você não fez uma escolha"
     return Principal(request)
 
 def horarios_manual(request):
@@ -76,11 +93,18 @@ def horarios_manual(request):
         lista_estudos.append(sla)# sla = [id do horario de estudo, nome da materia que esta estudando, horario da materia]
         sla=[]
 
+    try:
+        apagar = request.POST.getlist("apagar")
+    except:
+        apagar = []
+        erro = "Não deu certo"
+    if len(apagar) > 0:
+        for x in apagar:
+            Horarioestudo.objects.filter(aluno=usuario, id=int(x)).delete()
     form = horarios_form(request.POST or None)
-
+    
     if form.is_valid():
-        mae = form.cleaned_data
-        m = mae
+        m = form.cleaned_data
         ida = m['id']
         hh = m['horario']
         if len(Horarioestudo.objects.filter(id=ida, aluno=usuario)) > 0: # editando o horario de uma materia
@@ -92,17 +116,14 @@ def horarios_manual(request):
                     mm = Materia.objects.filter(nome = m['materia'], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')) # recebe a nova materia
                 else:
                     mm = Materia.objects.filter(id=h.materias.id, id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')) # recebe a materia que ja estava lá
-                if len(hh) == 0:
-                    h.delete()
-                else:
-                    id = h.id
-                    h.delete()
-                    h.horario = hh
-                    h.id = id
-                    h.save()
+
+                h.delete()
+                h.horario = hh
+                h.id = ida
+                h.save()
 
         else: #criando um novo horario de estudo
-            {'id': 1, 'horario': '1M12', 'materia': 'Inglês Técnico'}
+            # {'id': 1, 'horario': '1M12', 'materia': 'Inglês Técnico'}
             if len(Horarioestudo.objects.filter(horario=hh, aluno = usuario)) > 0: # verifica se o horario de estudo está preenchido
                 erro = "horario já preenchido"
             elif len(hh) != 4 and len(hh) != 9:
@@ -125,7 +146,7 @@ def horarios_manual(request):
                             Horarioestudo(aluno = usuario, materias=mm[0], horario = hh).save()
                 else:
                     erro = "Você não esta cadastrado nessa matéria"
-
+    
     return render(request, 'Projetos/horarios.html', locals())
 
 def apagar_horarios(request):
@@ -137,35 +158,50 @@ def apagar_horarios(request):
     return Principal(request)
 
 def editar_atividades(request):
-    usuario = Usuario.objects.get(id=1)
-    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
-    atividades = Atividade.objects.filter(aluno=usuario).values_list('materia', 'conteudo')
     lista_atividades = []
     sla = []
     form = atividades_form(request.POST or None)
+    usuario = Usuario.objects.get(id=1)
+    materias = Materia.objects.filter(id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias')).order_by('horario')
+    atividades = Atividade.objects.filter(aluno=usuario).values_list('materia', 'conteudo', 'id')
+    erro = ""
 
-    if form.is_valid():
-        m = form.cleaned_data
-        cc = m["conteudo"]
-        if m["materia"] != "":
+    try:
+        apagar = request.POST.getlist("apagar")
+    except:
+        apagar = []
+        erro = "Não deu certo"
+    if len(apagar) > 0:
+        for x in apagar:
+            Atividade.objects.filter(aluno=usuario, id=int(x)).delete()
+    else:
+        try:
+            choice = request.POST["escolha"] # estudar ou revisar. retorna o id das opções cujo nome é "escolha"
+            # Aqui foi usado post por causa no templat, que no form está descrito que o method é um post
+        except:
+            choice = ""
+
+        if choice == "apagar_tudo":
+            for x in Atividade.objects.filter(aluno=usuario):
+                x.delete()
+        elif form.is_valid():
+            m = form.cleaned_data
+            cc = m["conteudo"]
             mm = Materia.objects.filter(nome = m["materia"], id__in=Gradeestudo.objects.filter(aluno=usuario).values_list('materias'))
-            if cc == "12345":
+            if choice == "apagar_materia":
                 for x in Atividade.objects.filter(materia=mm[0],aluno=usuario):
                     x.delete()
             else:
-                Atividade(materia=mm[0], conteudo=cc, aluno = usuario).save()
-        else:
-            if cc == "12345":
-                for x in Atividade.objects.filter(aluno=usuario):
-                    x.delete()
-            else:
-                Atividade(conteudo=cc, aluno = usuario).save()
+                if cc != "":
+                    Atividade(materia=mm[0], conteudo=cc, aluno = usuario).save()
+        
     for x in atividades:
         a = x[0]
         c = Materia.objects.filter(id=a)
         if (len(c)>0):
-            sla.append(c[0].nome)
-            sla.append(x[1])
+            sla.append(c[0].nome) # matéria
+            sla.append(x[1]) #conteúdo
+            sla.append(str(x[2])); #id
             lista_atividades.append(sla)
             sla = []
 

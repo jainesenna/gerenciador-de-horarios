@@ -51,7 +51,16 @@
         </table>
         {% else %}
         <p>Sem horario de estudo cadastrado</p>
-        <a class="btn btn-primary" href="{% url 'Projetos:horarios_auto'%}">Criar um horario automatico</a><br />
+        <form action="{% url 'Projetos:horarios_auto'%}">
+            <input type="radio" name="escolha" id="revisar" value="revisar">
+            <label>Revisar os assuntos estudados</label><br>
+            <input type="radio" name="escolha" id="estudar" value="estudar">
+            <label>Estudar os assuntos antes da aula</label><br>
+            <input type="submit" value="Criar um horario automatico">
+        </form>
+        {%if erro%}
+        {{erro}}
+        {%endif%}
         <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Criar um horario Manualmente</a><br /><br />
         {% endif %}
         <a class="btn btn-primary" href="{% url 'Projetos:horarios_manual'%}">Editar horario de estudo</a><br />
