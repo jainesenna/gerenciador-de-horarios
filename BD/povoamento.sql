@@ -38,6 +38,6 @@ select m.nome as estudar, h.horario from materia m, usuario u, horarioestudo h w
 union
 select "Aulas" as estudar, "" as horario
 union
-select m.nome, m.horario from materia m, usuario u, gradeestudo g where g.aluno = u.id and g.materias = m.id;
+select m.nome, m.horario from materia m, usuario u, gradeEstudo g where g.aluno = u.id and g.materias = m.id;
 
-select * from gradeestudo;
+select * from gradeEstudo;
