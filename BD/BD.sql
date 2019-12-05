@@ -1,6 +1,6 @@
 #create database trabalhobd2019_2;
 #SET FOREIGN_KEY_CHECKS=0;
-#drop tables gradeestudo, usuario, materia, atividade,horarioestudo;
+#drop tables gradeEstudo, usuario, materia, atividade,HorarioEstudo;
 #SET FOREIGN_KEY_CHECKS=1;
 use trabalhobd2019_2;
 

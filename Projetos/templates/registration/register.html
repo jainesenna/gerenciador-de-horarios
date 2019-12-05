@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'Projetos/login.css' %}">
+    <title>Faça o registro</title>
+</head>
+<body>
+    
+    {% block content %}
+    <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card auth-card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Faça o seu registro</h1>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                            <!-- {{ form.as_p }} -->
+                             
+                            
+                            <p><input type="text" name="username" autofocus="" autocapitalize="none" 
+                                autocomplete="username" class="form-control" required="" id="id_username" 
+                                placeholder="Login"></p>
+                            <p><span class="helptext">Obrigatório. 150 caracteres ou menos. Letras, 
+                                números e @/./+/-/_ apenas.</span></p>
+                            
+  
+                            <p><input type="password" name="password1" autofocus="" autocapitalize="none" 
+                                autocomplete="new-password" class="form-control" required="" 
+                                id="id_password1" placeholder="Senha"></p>  
+                            <ul><li>Your password can’t be too similar to your other personal information.</li>
+                                <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                                <li>Your password can’t be a commonly used password.</li>
+                                <li>Your password can’t be entirely numeric.</li></ul>
+                            
+                            <p></p>
+                            <p><input type="password" name="password2" autofocus="" autocapitalize="none" 
+                                autocomplete="new-password" class="form-control" required="" 
+                                id="id_password2" placeholder="Confirme a Senha"></p>
+                            <p><span class="helptext">Informe a mesma senha informada anteriormente, 
+                                para verificação.</span></p>
+                            
+                                       
+                            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                        </form>
+        
+                    </div>
+                </div>
+            </div>
+        </div> 
+    {% endblock %}
+</body>
+</html>
+
