@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'Projetos',
     'django_tables2',
     'account',
+    'bootstrapform',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
